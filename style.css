@@ -77,3 +77,32 @@ body {
     text-align: center;
     box-shadow: 0 0 30px orangered;
 }
+.definitions {
+    max-width: 800px;
+    background: #1a1a1a;
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+.definitions h2 {
+    margin-top: 0;
+    color: red;
+    text-shadow: 0 0 10px red;
+}
+
+dl {
+    margin: 0;
+}
+
+dt {
+    font-weight: bold;
+    color: orangered;
+    margin-top: 15px;
+}
+
+dd {
+    margin-left: 20px;
+    color: #ccc;
+}
