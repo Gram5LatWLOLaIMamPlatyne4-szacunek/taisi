@@ -1,80 +1,38 @@
 <!DOCTYPE html>
-<html lang="pl-PL">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>binarne</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Moja Strona</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        a {
+            display: block;
+            margin: 10px;
+            font-size: 20px;
+            text-decoration: none;
+            color: blue;
+        }
+
+        a:hover {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="result-display">Suma: 0</div>
-    <div id="container"></div>
-<div class="definitions">
-    <h2>Definicje</h2>
-    <dl>
-        <dt>Liczba binarna</dt>
-        <dd>System liczbowy oparty na potęgach liczby 2.</dd>
+<h1>Moje podstrony</h1>
 
-        <dt>Karta</dt>
-        <dd>Reprezentuje jedną potęgę liczby 2.</dd>
-
-        <dt>Suma</dt>
-        <dd>Aktualna wartość aktywnych kart.</dd>
-    </dl>
-</div>
-
-    <script>
-        const container = document.getElementById('container');
-        const resultDisplay = document.getElementById('result-display');
-        const maxCards = 8;
-        const cardGap = 8;
-        let totalSum = 0;
-
-        for (let i = 0; i < maxCards; i++) {
-            const value = Math.pow(2, i);
-            
-            const wrapper = document.createElement('div');
-            wrapper.className = 'card-wrapper';
-
-            const card = document.createElement('div');
-            card.className = 'card active';
-            
-            const dotsInRow = Math.ceil(Math.sqrt(value));
-            const dotSize = `calc((100% - ${(dotsInRow - 1) * cardGap}px) / ${dotsInRow})`;
-
-            for (let j = 0; j < value; j++) {
-                const dot = document.createElement('img');
-                dot.src = 'kropka.jpg';
-                dot.className = 'dot';
-                dot.style.width = dotSize;
-                dot.style.height = dotSize;
-                card.appendChild(dot);
-            }
-
-            const label = document.createElement('div');
-            label.className = 'label';
-            label.innerText = value;
-
-            totalSum += value;
-            resultDisplay.innerText = `Suma: ${totalSum}`;
-
-            card.addEventListener('click', function() {
-                const isActive = this.classList.toggle('active');
-                
-                if (isActive) {
-                    totalSum += value;
-                } else {
-                    totalSum -= value;
-                }
-                
-                resultDisplay.innerText = `Suma: ${totalSum}`;
-            });
-
-            wrapper.appendChild(card);
-            wrapper.appendChild(label);
-            container.appendChild(wrapper);
-        }
-    </script>
+<a href="3.html">Podstrona 1</a>
+<a href="4.html">Podstrona 2</a>
+<a href="5.html">Podstrona 3</a>
+<a href="oblicz2.html">Podstrona 4</a>
+<a href="olbicz.html">Podstrona 5</a>
+<a href="karty.html">Podstrona 6</a>
 
 </body>
 </html>
