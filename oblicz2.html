@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+<meta charset="UTF-8">
+<title>strona</title>
+</head>
+<body>
+
+<button onclick="oblicz()">Oblicz</button>
+
+<script>
+function oblicz(){
+
+    let a, b, c;
+
+    do{
+        a = Number(prompt("Podaj pierwszy bok:"));
+        b = Number(prompt("Podaj drugi bok:"));
+        c = Number(prompt("Podaj trzeci bok:"));
+    }while(isNaN(a) || isNaN(b) || isNaN(c));
+    let p = (a+b+c)/2;
+    let obwod= p*2;
+    let pole = Math.sqrt(p*(p-a)*(p-b)*(p-c));
+    alert("Obwod jest rowny: " + obwod + " Pole jest rowne: " + pole.toFixed(2));
+}
+</script>
+
+</body>
+</html>
