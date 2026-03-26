@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zadania - Liquid Glass Monochrome</title>
+    <style>
+        :root {
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* ŚNIEG - tło */
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* LIQUID GLASS CONTAINER */
+        .glass-container {
+            position: relative;
+            z-index: 10;
+            width: 85%;
+            max-width: 900px;
+            height: 75vh;
+            
+            /* Efekt szkła */
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            
+            /* Cień wewnętrzny dodaje głębi szkła */
+            box-shadow: 
+                0 40px 100px rgba(0, 0, 0, 0.8),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            
+            /* Wymuszenie warstwowości dla płynnej animacji pod spodem */
+            transform: translateZ(0); 
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        header {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header h1 {
+            margin: 0 0 25px 0;
+            font-weight: 200;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 8px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        #content-area {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        /* Pasek przewijania wewnątrz szkła */
+        #content-area::-webkit-scrollbar { width: 6px; }
+        #content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .task-container {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            color: white;
+            width: 85%;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); }
+
+        .submit-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover { background: #ccc; transform: translateY(-2px); }
+
+        .res { margin-top: 20px; font-size: 0.9rem; color: rgba(255,255,255,0.7); }
+    </style>
+</head>
+<body>
+
+<canvas id="snow-canvas"></canvas>
+
+<div class="glass-container">
+    <header>
+        <h1>Laboratorium</h1>
+        <nav>
+            <button class="nav-btn active" onclick="showPage(event, 'p1')">Zadanie 1</button>
+            <button class="nav-btn" onclick="showPage(event, 'p2')">Zadanie 2</button>
+            <button class="nav-btn" onclick="showPage(event, 'p3')">Zadanie 3</button>
+            <button class="nav-btn" onclick="showPage(event, 'p4')">Zadanie 4</button>
+            <button class="nav-btn" onclick="showPage(event, 'p5')">Zadanie 5</button>
+            <button class="nav-btn" onclick="showPage(event, 'p6')">Zadanie 6</button>
+        </nav>
+    </header>
+
+    <main id="content-area">
+        <div id="p1" class="page active">
+            <h2>Walidacja</h2>
+            <div class="task-container" style="text-align: left;">
+                • <b>Zalety:</b> Szybkość, oszczędność serwera.<br>
+                • <b>Wady:</b> Łatwe do obejścia, błędy JS.
+            </div>
+        </div>
+
+        <div id="p2" class="page">
+            <h2>Dane osobowe</h2>
+            <div class="task-container">
+                <form onsubmit="doZ2(event)">
+                    <input type="text" id="i2" placeholder="Imię">
+                    <input type="text" id="n2" placeholder="Nazwisko">
+                    <input type="number" id="w2" placeholder="Wiek">
+                    <button type="submit" class="submit-btn">Wykonaj</button>
+                </form>
+                <div id="r2" class="res"></div>
+            </div>
+        </div>
+
+        <div id="p3" class="page">
+            <h2>Ile dni żyjesz?</h2>
+            <div class="task-container">
+                <form onsubmit="doZ3(event)">
+                    <input type="number" id="r3" placeholder="Rok">
+                    <input type="number" id="m3" placeholder="Miesiąc">
+                    <input type="number" id="d3" placeholder="Dzień">
+                    <button type="submit" class="submit-btn">Oblicz</button>
+                </form>
+                <div id="r3_res" class="res"></div>
+            </div>
+        </div>
+
+        <div id="p4" class="page">
+            <h2>Walidacja Alert</h2>
+            <div class="task-container">
+                <form onsubmit="validateZ4(event)">
+                    <input type="text" id="imie4" placeholder="Imię">
+                    <input type="text" id="nazwisko4" placeholder="Nazwisko">
+                    <input type="email" id="mail4" placeholder="E-mail">
+                    <button type="submit" class="submit-btn">Sprawdź</button>
+                </form>
+                <div id="r4" class="res"></div>
+            </div>
+        </div>
+
+<div id="p5" class="page">
+    <h2>Zadanie 5</h2>
+    <div class="task-container">
+        <textarea id="txt5" rows="6" style="width: 90%;" placeholder="Wpisuj tekst..." oninput="countChars()"></textarea>
+        <div id="res5" class="res">Liczba znaków: 0</div>
+    </div>
+</div>
+<div id="p6" class="page">
+    <h2>Zadanie 6</h2>
+    <div class="task-container">
+        <input type="number" id="a6" placeholder="Liczba 1">
+        <input type="number" id="b6" placeholder="Liczba 2">
+        
+        <div style="margin-top:10px;">
+            <button class="submit-btn" onclick="calc('+')">+</button>
+            <button class="submit-btn" onclick="calc('-')">-</button>
+            <button class="submit-btn" onclick="calc('*')">*</button>
+            <button class="submit-btn" onclick="calc('/')">/</button>
+        </div>
+
+        <div id="res6" class="res">Wynik: </div>
+
+        <button class="submit-btn" onclick="clearCalc()" style="margin-top:15px;">Wyczyść</button>
+    </div>
+</div>
+    </main>
+</div>
+
+<script>
+    function showPage(e, id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        e.currentTarget.classList.add('active');
+    }
+
+    // Skrypty zadań (bez zmian w logice)
+    function doZ2(e) {
+        e.preventDefault();
+        const i = document.getElementById("i2").value;
+        const n = document.getElementById("n2").value;
+        const w = document.getElementById("w2").value;
+        document.getElementById("r2").innerHTML = `Imię: ${i}<br>Nazwisko: ${n}<br>Wiek: ${w}`;
+    }
+
+    function doZ3(e) {
+        e.preventDefault();
+        const d = new Date(document.getElementById("r3").value, document.getElementById("m3").value - 1, document.getElementById("d3").value);
+        const dni = Math.floor((new Date() - d) / (1000 * 86400));
+        document.getElementById("r3_res").innerText = isNaN(dni) ? "Podaj poprawną datę" : "Żyjesz: " + dni + " dni";
+    }
+
+    function validateZ4(e) {
+        e.preventDefault();
+        const imie = document.getElementById("imie4").value.trim();
+        const nazwisko = document.getElementById("nazwisko4").value.trim();
+        const mail = document.getElementById("mail4").value.trim();
+        if (!imie) alert("BŁĄD: Pole IMIĘ jest puste!");
+        if (!nazwisko) alert("BŁĄD: Pole NAZWISKO jest puste!");
+        if (!mail) alert("BŁĄD: Pole E-MAIL jest puste!");
+        if (imie && nazwisko && mail) document.getElementById("r4").innerText = "Wszystkie pola wypełnione poprawnie.";
+    }
+
+    // SYSTEM ŚNIEGU - Zoptymalizowany pod Glass Morphism
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles;
+
+    function init() {
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w;
+        canvas.height = h;
+        particles = [];
+        for (let i = 0; i < 120; i++) {
+            particles.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 3 + 1,
+                speedY: Math.random() * 1.5 + 0.5,
+                speedX: (Math.random() - 0.5) * 1 // Lekki ruch na boki
+            });
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; // Płatki lekko przezroczyste dla lepszego efektu
+        ctx.beginPath();
+        for (let p of particles) {
+            ctx.moveTo(p.x, p.y);
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        }
+        ctx.fill();
+        update();
+        requestAnimationFrame(draw);
+    }
+
+    function update() {
+        for (let p of particles) {
+            p.y += p.speedY;
+            p.x += p.speedX;
+
+            // Resetowanie płatków - jeśli wypadnie dołem, wróć na górę
+            if (p.y > h) {
+                p.y = -10;
+                p.x = Math.random() * w;
+            }
+            // Jeśli wypadnie boczkiem, wróć z drugiej strony
+            if (p.x > w) p.x = 0;
+            if (p.x < 0) p.x = w;
+        }
+    }
+function countChars() {
+    const text = document.getElementById("txt5").value;
+    document.getElementById("res5").innerText = "Liczba znaków: " + text.length;
+}
+function calc(op) {
+    const a = parseFloat(document.getElementById("a6").value);
+    const b = parseFloat(document.getElementById("b6").value);
+    let wynik;
+
+    if (isNaN(a) || isNaN(b)) {
+        document.getElementById("res6").innerText = "Podaj liczby!";
+        return;
+    }
+
+    switch(op) {
+        case '+': wynik = a + b; break;
+        case '-': wynik = a - b; break;
+        case '*': wynik = a * b; break;
+        case '/': 
+            wynik = b === 0 ? "Nie dziel przez 0!" : a / b; 
+            break;
+    }
+
+    document.getElementById("res6").innerText = "Wynik: " + wynik;
+}
+
+function clearCalc() {
+    document.getElementById("a6").value = "";
+    document.getElementById("b6").value = "";
+    document.getElementById("res6").innerText = "Wynik: ";
+}
+    window.addEventListener('resize', init);
+    init(); 
+    draw();
+</script>
+</body>
+</html>
